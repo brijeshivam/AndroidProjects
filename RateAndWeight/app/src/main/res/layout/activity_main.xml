@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cardview_dark_background"
+    android:backgroundTint="#00B8D4"
+    android:paddingTop="10dp"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rate"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#DD2C00"
+            android:hint="100/Kg"
+            android:paddingStart="20dp"
+            android:inputType="number"
+            android:textColor="@color/cardview_light_background"
+            android:textColorHint="#6DFF7043"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Weight"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#DD2C00"
+            android:hint="100g"
+            android:paddingStart="20dp"
+            android:inputType="number"
+            android:textColor="@color/cardview_light_background"
+            android:textColorHint="#6DFF7043"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rupee"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/rupees"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#DD2C00"
+            android:hint="100"
+            android:paddingStart="20dp"
+            android:inputType="number"
+            android:textColor="@color/cardview_light_background"
+            android:textColorHint="#6DFF7043"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="5dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textColor="@color/cardview_light_background"
+            android:text="Result : "
+            android:id="@+id/resulttv"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="5dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FF5722"
+            android:fontFamily="sans-serif-light"
+
+            android:onClick="calculate"
+            android:text="Calculate"
+            android:textSize="30sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
