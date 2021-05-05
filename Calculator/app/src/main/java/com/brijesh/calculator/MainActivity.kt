@@ -178,7 +178,7 @@ class MainActivity : AppCompatActivity() {
                 if (input.length > 46 || input == "") {
                     return
                 }
-                if (input[input.lastIndex] =='-'&&(input[input.lastIndex-1] =='*'|| input[input.lastIndex-1] =='/')) {
+                if (input.length!=1 &&input[input.lastIndex] =='-'&&(input[input.lastIndex-1] =='*'|| input[input.lastIndex-1] =='/')) {
                     input = input.dropLast(1)
                     findViewById<TextView>(R.id.tv2).text = input
                     return
