@@ -14,7 +14,7 @@ import java.math.BigDecimal
 
 
 class MainActivity : AppCompatActivity() {
-    var input="";
+    var input=""
     var inputCopy ="a"
     var dotUsed: Boolean = false
     var result: Double = 0.0
@@ -137,6 +137,8 @@ class MainActivity : AppCompatActivity() {
 
             R.id.btnc -> {
                 input = ""
+                inputCopy="a"
+                resultString = "0"
                 findViewById<TextView>(R.id.tv2).text = ""
                 findViewById<TextView>(R.id.tv3).text = "0"
                 dotUsed = false
