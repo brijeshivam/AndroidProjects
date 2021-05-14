@@ -1,12 +1,20 @@
 package com.brijesh.relaxbro
 
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -21,18 +29,9 @@ class Home : AppCompatActivity() {
     var link: String? = ""
     var title: String? = ""
     var i =0;
-    var tempLink=""
-    var tempTitle = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-         val bundle:Bundle? = intent.extras
-        link = bundle?.get("FirstLink") as String?
-        title = bundle?.get("FirstTitle") as String?
-        findViewById<TextView>(R.id.textView).text = title
-        draw()
-        tempLink = link as String
-        tempTitle = title as String
         getMemeLink()
 
     }
@@ -50,7 +49,7 @@ class Home : AppCompatActivity() {
                 // Display the first 500 characters of the response string.
                 link = response.getString("url")
                 title = response.getString("title")
-
+                draw()
                 if(i>6) i = 0
                 i++
 
@@ -75,7 +74,7 @@ class Home : AppCompatActivity() {
                 isFirstResource: Boolean
             ): Boolean {
                 findViewById<ProgressBar>(R.id.progress).visibility = View.GONE
-                findViewById<Button>(R.id.button).isEnabled = true
+                findViewById<TextView>(R.id.textView).text = title
                 return false
             }
 
@@ -92,17 +91,37 @@ class Home : AppCompatActivity() {
     }
 
     fun clickedNext(v: View) {
-        findViewById<TextView>(R.id.textView).text = title
-        draw()
-        tempLink = link as String
-        tempTitle = title as String
         getMemeLink()
 
     }
     fun shareMeme(view: View) {
-        val i = Intent(Intent.ACTION_SEND)
-        i.type = "text/plain"
-        i.putExtra(Intent.EXTRA_TEXT, "*Check This Meme* \n $tempTitle \n $tempLink")
-        startActivity(Intent.createChooser(i, "Share this meme with"))
+        try {
+            val iv: ImageView = findViewById(R.id.memeImageView)
+            val bitMapDrawable: BitmapDrawable = iv.drawable as BitmapDrawable
+            val bitMap: Bitmap = bitMapDrawable.bitmap
+
+            val bitmapPath: String =
+                MediaStore.Images.Media.insertImage(contentResolver, bitMap, "Hello", null)
+
+            val uri: Uri = Uri.parse(bitmapPath)
+
+            //-------------
+            val i = Intent(Intent.ACTION_SEND)
+            i.type = "*/*"
+            i.putExtra(Intent.EXTRA_STREAM, uri)
+            i.putExtra(Intent.EXTRA_TEXT, "$title")
+            startActivity(Intent.createChooser(i, "Share this meme with"))
+
+
+        } catch (e: Exception) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 101
+            )
+
+
+        }
     }
+
+
 }
