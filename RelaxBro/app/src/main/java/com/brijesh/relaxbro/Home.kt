@@ -1,28 +1,26 @@
 package com.brijesh.relaxbro
 
 
-import android.Manifest
+import android.R.attr.bitmap
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.provider.MediaStore
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-
-
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 
 
 class Home : AppCompatActivity() {
@@ -96,32 +94,53 @@ class Home : AppCompatActivity() {
     }
 
     fun shareMeme(view: View) {
-        try {
             val iv: ImageView = findViewById(R.id.memeImageView)
             val bitMapDrawable: BitmapDrawable = iv.drawable as BitmapDrawable
             val bitMap: Bitmap = bitMapDrawable.bitmap
 
-            val bitmapPath: String =
-                MediaStore.Images.Media.insertImage(contentResolver, bitMap, "Hello", null)
+        val cachePath = File(externalCacheDir, "my_images/")
+        cachePath.mkdirs()
 
-            val uri: Uri = Uri.parse(bitmapPath)
+        //create png file
 
-            //-------------
-            val i = Intent(Intent.ACTION_SEND)
-            i.type = "image/*"
-            i.putExtra(Intent.EXTRA_STREAM, uri)
-            i.putExtra(Intent.EXTRA_TEXT, "$title")
-            startActivity(Intent.createChooser(i, "Share this meme with"))
-
-
-        } catch (e: Exception) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 101
-            )
-
-
+        //create png file
+        val file = File(cachePath, "Image_123.jpeg")
+        val fileOutputStream: FileOutputStream
+        try {
+            fileOutputStream = FileOutputStream(file)
+            bitMap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+            fileOutputStream.flush()
+            fileOutputStream.close()
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
+
+        //---Share File---//
+        //get file uri
+
+        //---Share File---//
+        //get file uri
+        val myImageFileUri =
+            FileProvider.getUriForFile(this, applicationContext.packageName + ".provider", file)
+
+        //create a intent
+
+        //create a intent
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intent.putExtra(Intent.EXTRA_STREAM, myImageFileUri)
+        intent.type = "image/*"
+        startActivity(Intent.createChooser(intent, "Share with"))
+
+
+
+    }
+
+    private fun shareGif(){
+
     }
 
 
