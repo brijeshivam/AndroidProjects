@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Relax Bro</string>
+    <string name="share">Share</string>
+    <string name="next">Next</string>
+    <string name="title">Title</string>
+    <string name="meme">Meme</string>
 </resources>
