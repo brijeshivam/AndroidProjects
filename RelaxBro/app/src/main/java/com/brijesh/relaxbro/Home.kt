@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.provider.MediaStore
 import android.view.View
 import android.widget.*
@@ -20,9 +21,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
-import java.lang.Thread.sleep
+
+
 
 
 class Home : AppCompatActivity() {
@@ -36,10 +36,11 @@ class Home : AppCompatActivity() {
 
         setTheme(R.style.Theme_RelaxBro)
         setContentView(R.layout.activity_home)
-        findViewById<ProgressBar>(R.id.progress).visibility = View.INVISIBLE
         getMemeLink()
+        Handler().postDelayed({
+            draw()
+        }, 2000)
 
-        draw()
         getMemeLink()
 
     }
