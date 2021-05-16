@@ -37,7 +37,7 @@ class Home : AppCompatActivity() {
 
         setTheme(R.style.Theme_RelaxBro)
         setContentView(R.layout.activity_home)
-        //shivampanwr@newest
+        //master Branch
         getMemeLink()
 
     }
