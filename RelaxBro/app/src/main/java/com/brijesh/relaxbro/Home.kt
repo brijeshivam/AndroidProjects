@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import java.lang.Thread.sleep
 
 
 class Home : AppCompatActivity() {
@@ -30,8 +32,12 @@ class Home : AppCompatActivity() {
     var title: String? = ""
     var i =0;
     override fun onCreate(savedInstanceState: Bundle?) {
+        //sleep(3000)
         super.onCreate(savedInstanceState)
+
+        setTheme(R.style.Theme_RelaxBro)
         setContentView(R.layout.activity_home)
+
         getMemeLink()
 
     }
@@ -65,7 +71,8 @@ class Home : AppCompatActivity() {
     }
 
     fun draw(){
-        Glide.with(this).load(link).listener(object : RequestListener<Drawable>{
+        Glide.with(this).load(link).placeholder(R.drawable.wait)
+            .listener(object : RequestListener<Drawable>{
             override fun onResourceReady(
                 resource: Drawable?,
                 model: Any?,
@@ -93,6 +100,7 @@ class Home : AppCompatActivity() {
     fun clickedNext(v: View) {
         getMemeLink()
 
+
     }
     fun shareMeme(view: View) {
         try {
@@ -107,7 +115,7 @@ class Home : AppCompatActivity() {
 
             //-------------
             val i = Intent(Intent.ACTION_SEND)
-            i.type = "*/*"
+            i.type = "image/*"
             i.putExtra(Intent.EXTRA_STREAM, uri)
             i.putExtra(Intent.EXTRA_TEXT, "$title")
             startActivity(Intent.createChooser(i, "Share this meme with"))
