@@ -1,7 +1,6 @@
 package com.brijesh.relaxbro
 
 
-import android.R.attr.bitmap
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -13,14 +12,16 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.android.volley.Request
+import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
+import java.net.HttpURLConnection
+import java.net.MalformedURLException
+import java.net.URL
 
 
 class Home : AppCompatActivity() {
@@ -28,16 +29,18 @@ class Home : AppCompatActivity() {
     var title: String? = ""
     var i = 0
     var glide: RequestBuilder<Drawable>? = null
+    var url: MutableList<String>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
 
         setTheme(R.style.Theme_RelaxBro)
         setContentView(R.layout.activity_home)
-        getMemeLink()
+        getLinks()
+
         Handler().postDelayed({
             draw()
-        }, 2000)
+        }, 3000)
 
         getMemeLink()
 
@@ -45,25 +48,18 @@ class Home : AppCompatActivity() {
 
     fun getMemeLink() {
 
-        val queue = Volley.newRequestQueue(this)
-        val url = arrayOf(
-            "https://meme-api.herokuapp.com/gimme/indiameme",
-            "https://meme-api.herokuapp.com/gimme/memes",
-            "https://meme-api.herokuapp.com/gimme/dankinindia",
-            "https://meme-api.herokuapp.com/gimme/IndianDankMemes",
-            "https://meme-api.herokuapp.com/gimme/HindiMemes",
-            "https://meme-api.herokuapp.com/gimme/ComedyCemetery"
-        )
+        val queue2 = Volley.newRequestQueue(this)
+        val size = url?.size
 
 // Request a string response from the provided URL.
         val jsonRequest = JsonObjectRequest(
-            Request.Method.GET, url[i % 6], null,
+            Request.Method.GET, url?.get(i % size!!), null,
             { response ->
                 // Display the first 500 characters of the response string.
                 link = response.getString("url")
                 title = response.getString("title")
                 preload()
-                if (i > 6) i = 0
+                if (i > size!!) i = 0
                 i++
 
 
@@ -73,16 +69,16 @@ class Home : AppCompatActivity() {
             })
 
 // Add the request to the RequestQueue.
-        queue.add(jsonRequest)
+        queue2.add(jsonRequest)
 
     }
 
     fun preload() {
         glide = Glide.with(this).load(link)
+
     }
 
     fun clickedNext(v: View) {
-        //findViewById<ProgressBar>(R.id.progress).visibility = View.VISIBLE
         draw()
         getMemeLink()
     }
@@ -94,16 +90,15 @@ class Home : AppCompatActivity() {
     }
 
     fun shareMeme(view: View) {
-            val iv: ImageView = findViewById(R.id.memeImageView)
-            val bitMapDrawable: BitmapDrawable = iv.drawable as BitmapDrawable
-            val bitMap: Bitmap = bitMapDrawable.bitmap
+        val iv: ImageView = findViewById(R.id.memeImageView)
+        val bitMapDrawable: BitmapDrawable = iv.drawable as BitmapDrawable
+        val bitMap: Bitmap = bitMapDrawable.bitmap
 
         val cachePath = File(externalCacheDir, "my_images/")
         cachePath.mkdirs()
 
-        //create png file
+        //create jpeg file
 
-        //create png file
         val file = File(cachePath, "Image_123.jpeg")
         val fileOutputStream: FileOutputStream
         try {
@@ -136,12 +131,29 @@ class Home : AppCompatActivity() {
         startActivity(Intent.createChooser(intent, "Share with"))
 
 
-
     }
 
-    private fun shareGif(){
+
+    fun getLinks() {
+
+        val queue1 = Volley.newRequestQueue(this)
+        val links = "https://raw.githubusercontent.com/brijeshivam/text/main/links"
+
+// Request a string response from the provided URL.
+        val stringRequest = StringRequest(Request.Method.GET, links,
+            Response.Listener<String> { response ->
+                // Display the first 500 characters of the response string.
+                url = response.split("]") as MutableList<String>
+                getMemeLink()
+            },
+            Response.ErrorListener { })
+
+// Add the request to the RequestQueue.
+        queue1.add(stringRequest)
+
 
     }
-
 
 }
+
+
