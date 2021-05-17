@@ -18,6 +18,9 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
@@ -30,19 +33,20 @@ class Home : AppCompatActivity() {
     var i = 0
     var glide: RequestBuilder<Drawable>? = null
     var url: MutableList<String>? = null
+    var isFirstTime = true
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-
         setTheme(R.style.Theme_RelaxBro)
         setContentView(R.layout.activity_home)
         getLinks()
 
-        Handler().postDelayed({
-            draw()
-        }, 3000)
 
-        getMemeLink()
+//        Handler().postDelayed({
+//            draw()
+//        }, 3000)
+
+
 
     }
 
@@ -75,6 +79,11 @@ class Home : AppCompatActivity() {
 
     fun preload() {
         glide = Glide.with(this).load(link)
+        if(isFirstTime){
+            draw()
+            getMemeLink()
+            isFirstTime = false
+        }
 
     }
 
@@ -115,8 +124,6 @@ class Home : AppCompatActivity() {
         //---Share File---//
         //get file uri
 
-        //---Share File---//
-        //get file uri
         val myImageFileUri =
             FileProvider.getUriForFile(this, applicationContext.packageName + ".provider", file)
 
